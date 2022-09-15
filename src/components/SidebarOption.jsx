@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 function SidebarOption(props) {
   return (
     <Wrapper isVisible={props.Selected}>
@@ -23,7 +23,7 @@ const Wrapper = styled.div`
   color: #818181;
 
   p {
-    display: ${(props) => (props.isVisible ? "none" : "inline")};
+    display: ${(props) => (props.isVisible ? "inline" : "none")};
     font-weight: 300;
   }
   h3 {
@@ -48,4 +48,23 @@ const Wrapper = styled.div`
       font-weight: 800 !important;
     }
   }
+
+  ${(props) =>
+    props.isVisible &&
+    css`
+      background-color: #fcecec;
+      color: #c04b37;
+      font-weight: 800 !important;
+      h3 {
+        background-color: #fcecec;
+        color: #c04b37;
+        font-weight: 800 !important;
+      }
+      p {
+        display: inline;
+        background-color: #fcecec;
+        color: #c04b37;
+        font-weight: 800 !important;
+      }
+    `}
 `;
