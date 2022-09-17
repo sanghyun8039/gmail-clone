@@ -1,5 +1,6 @@
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
+import SendMail from "./components/SendMail";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import styled from "styled-components";
 import MailPage from "./Pages/MailPage";
@@ -17,6 +18,7 @@ function App() {
           </Routes>
         </AppBody>
       </BrowserRouter>
+      <SendMail />
     </Wrapper>
   );
 }
