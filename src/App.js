@@ -5,20 +5,50 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import styled from "styled-components";
 import MailPage from "./Pages/MailPage";
 import EmailListPage from "./Pages/EmailListPage";
+import { useDispatch, useSelector } from "react-redux";
+import { selectSendMessageIsOpen } from "./features/mailSlice";
+import { selectUser, login } from "./features/userSlice";
+import LoginPage from "./Pages/LoginPage";
+import { useEffect } from "react";
+import { auth } from "./firebase";
 function App() {
+  const sendMessageIsOpen = useSelector(selectSendMessageIsOpen);
+  const user = useSelector(selectUser);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        dispatch(
+          login({
+            displayName: user.displayName,
+            email: user.email,
+            photoUrl: user.photoURL,
+          })
+        );
+      }
+    });
+  }, []);
+
   return (
     <Wrapper>
-      <BrowserRouter>
-        <Header />
-        <AppBody>
-          <Sidebar />
-          <Routes>
-            <Route path="/mail" element={<MailPage />}></Route>
-            <Route path="/" element={<EmailListPage />}></Route>
-          </Routes>
-        </AppBody>
-      </BrowserRouter>
-      <SendMail />
+      {!user ? (
+        <LoginPage />
+      ) : (
+        <div>
+          <BrowserRouter>
+            <Header />
+            <AppBody>
+              <Sidebar />
+              <Routes>
+                <Route path="/" element={<EmailListPage />}></Route>
+                <Route path="/mail" element={<MailPage />}></Route>
+              </Routes>
+            </AppBody>
+          </BrowserRouter>
+          {sendMessageIsOpen && <SendMail />}
+        </div>
+      )}
     </Wrapper>
   );
 }

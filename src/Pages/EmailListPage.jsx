@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useState, useEffect } from "react";
 import styled from "styled-components";
 import { Checkbox, IconButton } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
@@ -13,7 +13,22 @@ import PeopleIcon from "@mui/icons-material/People";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import Section from "../components/Section";
 import EmailRow from "../components/EmailRow";
+import { db } from "../firebase";
 function EmailListPage() {
+  const [emails, setEmails] = useState([]);
+
+  useEffect(() => {
+    db.collection("emails")
+      .orderBy("timestamp", "desc")
+      .onSnapshot((snapshot) =>
+        setEmails(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            data: doc.data(),
+          }))
+        )
+      );
+  }, []);
   return (
     <Wrapper>
       <EMailListSettings>
@@ -50,6 +65,88 @@ function EmailListPage() {
         <Section Icon={LocalOfferIcon} title="Promotions" color="green" />
       </EMailListSections>
       <EMailList>
+        {emails.map(({ id, data: { to, subject, message, timestamp } }) => (
+          <EmailRow
+            id={id}
+            key={id}
+            title={to}
+            subject={subject}
+            description={message}
+            time={new Date(timestamp?.seconds * 1000).toUTCString()}
+          />
+        ))}
+        <EmailRow
+          title="Twitch"
+          subject="Hey fellow streamer!!!"
+          description="This is a test"
+          time="10pm"
+        />
+        <EmailRow
+          title="Twitch"
+          subject="Hey fellow streamer!!!"
+          description="This is a test"
+          time="10pm"
+        />
+        <EmailRow
+          title="Twitch"
+          subject="Hey fellow streamer!!!"
+          description="This is a testThis is a testThis is a testThis is a testThis is a testThis is a testThis is a testThis is a test"
+          time="10pm"
+        />
+        <EmailRow
+          title="Twitch"
+          subject="Hey fellow streamer!!!"
+          description="This is a test"
+          time="10pm"
+        />
+        <EmailRow
+          title="Twitch"
+          subject="Hey fellow streamer!!!"
+          description="This is a test"
+          time="10pm"
+        />
+        <EmailRow
+          title="Twitch"
+          subject="Hey fellow streamer!!!"
+          description="This is a testThis is a testThis is a testThis is a testThis is a testThis is a testThis is a testThis is a test"
+          time="10pm"
+        />{" "}
+        <EmailRow
+          title="Twitch"
+          subject="Hey fellow streamer!!!"
+          description="This is a test"
+          time="10pm"
+        />
+        <EmailRow
+          title="Twitch"
+          subject="Hey fellow streamer!!!"
+          description="This is a test"
+          time="10pm"
+        />
+        <EmailRow
+          title="Twitch"
+          subject="Hey fellow streamer!!!"
+          description="This is a testThis is a testThis is a testThis is a testThis is a testThis is a testThis is a testThis is a test"
+          time="10pm"
+        />{" "}
+        <EmailRow
+          title="Twitch"
+          subject="Hey fellow streamer!!!"
+          description="This is a test"
+          time="10pm"
+        />
+        <EmailRow
+          title="Twitch"
+          subject="Hey fellow streamer!!!"
+          description="This is a test"
+          time="10pm"
+        />
+        <EmailRow
+          title="Twitch"
+          subject="Hey fellow streamer!!!"
+          description="This is a testThis is a testThis is a testThis is a testThis is a testThis is a testThis is a testThis is a test"
+          time="10pm"
+        />{" "}
         <EmailRow
           title="Twitch"
           subject="Hey fellow streamer!!!"
@@ -76,6 +173,11 @@ function EmailListPage() {
 const Wrapper = styled.div`
   flex: 1;
   overflow: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 const EMailListSettings = styled.div`
   display: flex;
@@ -97,5 +199,7 @@ const EMailListSections = styled.div`
   z-index: 999;
 `;
 
-const EMailList = styled.div``;
+const EMailList = styled.div`
+  padding-bottom: 20%;
+`;
 export default EmailListPage;

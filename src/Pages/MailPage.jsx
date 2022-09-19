@@ -14,8 +14,11 @@ import UnfoldMoreIcon from "@mui/icons-material/UnfoldMore";
 import PrintIcon from "@mui/icons-material/Print";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { useNavigate } from "react-router-dom";
-function MailPage(props) {
+import { useSelector } from "react-redux";
+import { selectOpenMail } from "../features/mailSlice";
+function MailPage() {
   const navigate = useNavigate();
+  const selectedMail = useSelector(selectOpenMail);
   return (
     <Wrapper>
       <MailTools>
@@ -63,13 +66,13 @@ function MailPage(props) {
       </MailTools>
       <MailBody>
         <MailBodyHeader>
-          <h2>Subject</h2>
+          <h2>{selectedMail.subject}</h2>
           <CustomLabelImportantIcon />
-          <p>Title</p>
-          <MailTime>10pm</MailTime>
+          <p>{selectedMail.title}</p>
+          <MailTime>{selectedMail.time}</MailTime>
         </MailBodyHeader>
         <MailMessage>
-          <p>This is a Messsage</p>
+          <p>{selectedMail.description}</p>
         </MailMessage>
       </MailBody>
     </Wrapper>
